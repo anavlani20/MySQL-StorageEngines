@@ -17,8 +17,9 @@
 * [Activitat 7](#Ac7)
 * [Activitat 8](#Ac8)
 
-## Activitat 1. REALITZA I/O RESPON ELS SEGÜENTS APARTATS
 <a name="Ac1"></a>
+## Activitat 1. REALITZA I/O RESPON ELS SEGÜENTS APARTATS
+
 
 ### Indica quins són els motors d’emmagatzematge que pots utilitzar (quins estan actius)? Mostra al comanda utilitzada i el resultat d’aquesta.
        
