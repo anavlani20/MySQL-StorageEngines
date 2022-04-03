@@ -373,9 +373,9 @@ El bloqueig es produeix aquí perquè el client A necessita un bloqueig B per el
 
 
 
-
-## Activitat 2. INNODB part I. REALITZA ELS SEGÜENTS APARTATS  
 <a name="Ac2"></a>
+## Activitat 2. INNODB part I. REALITZA ELS SEGÜENTS APARTATS  
+
 
 **Desactiva l’opció que ve per defecte de innodb_file_per_table**
     
@@ -630,9 +630,10 @@ També podem comprovar el directori dels discos, com tenen i com estan creades e
 ![image](https://user-images.githubusercontent.com/61285257/160308357-d5ab3c00-ad1b-4d63-b631-101a4f5119aa.png)
 
 **Checkpoint: Mostra al professor els canvis realitzats i que la BD continua funcionant.**
-    
-## Activitat 3. INNODB part II. REALITZA ELS SEGÜENTS APARTATS  
+
 <a name="Ac3"></a>
+## Activitat 3. INNODB part II. REALITZA ELS SEGÜENTS APARTATS  
+
 
 **Partint de l'esquema anterior configura el Percona Server perquè cada taula generi el seu propi tablespace en una carpeta anomenada tspaces (aquesta pot estar situada a on vulgueu).**
 **Indica quins són els canvis de configuració que has realitzat.**
@@ -722,9 +723,9 @@ SELECT @@DATADIR;
 
 ![image](https://user-images.githubusercontent.com/61285257/160439612-83819421-2778-4fb6-9a7e-18e01416cf53.png)
 
-
-## Activitat 4. INNODB part III. REALITZA ELS SEGÜENTS APARTATS  
 <a name="Ac4"></a>
+## Activitat 4. INNODB part III. REALITZA ELS SEGÜENTS APARTATS  
+
 
 
 **Crea un tablespace anomenat 'ts1' situat a `/discs-mysql/disk1/` i col·loca les taules actor, address i category de la BD Sakila.**
@@ -846,9 +847,9 @@ Però per comentar per sobre, en l'aspecte de les querys MySQL, per explicar una
 
 **Checkpoint: Mostra al professor els canvis realitzats i que la BD continua funcionant**
 
-
-## Activitat 5. REDOLOG. REALITZA ELS SEGÜENTS APARTATS. (2 punt)  
 <a name="Ac5"></a>
+## Activitat 5. REDOLOG. REALITZA ELS SEGÜENTS APARTATS. (2 punt)  
+
 
 **Com podem comprovar (Innodb Log Checkpointing)**
 **LSN (Log Sequence Number)**
@@ -912,15 +913,16 @@ Ho podrem comprovar amb la mateixa comanda que el primer punt.
 
 Podem veure que no hi ha cap modificació, perquè no hem modificat cap pàgina (Una pàgina a Innodb conté files, índexs, etc.)
 
-**Checkpoint: Mostra al professor els canvis realitzats i que la BD continua funcionant.**
+**Checkpoint: Mostra al professor els canvis realitzats i que la BD continua funcionant.**  
 
-## Activitat 6. Implentar BD Distribuïdes. (1,5 punts)  
 <a name="Ac6"></a>
+## Activitat 6. Implentar BD Distribuïdes. (1,5 punts)  
 
 
-    
+
+<a name="Ac7"></a>   
 ## Activitat 7. Storage Engine CSV (0,5 punts)
-<a name="Ac7"></a>
+
 
 **Documenta i posa exemple de com utilitzar ENGINE CSV.**
 
@@ -991,10 +993,11 @@ Podem veure fins a la mida daquests arxius, insignificants.
 
 Ara amb el fitxer .csv podem llegir, i fins i tot escriure, mitjançant aplicacions de full de càlcul com Microsoft Excel.  
 
-**Checkpoint: Mostra al professor la configuració que has hagut de realitzar i el seu funcionament.**
+**Checkpoint: Mostra al professor la configuració que has hagut de realitzar i el seu funcionament.**  
 
-## Activitat 8. Storage Engine MyRocks (1 punt)
 <a name="Ac8"></a>
+## Activitat 8. Storage Engine MyRocks (1 punt)
+
 
 MyRocks és un motor d'emmagatzematge per MySQL basat en RocksDB (SGBD incrustat de tipus clau-valor). 
 Aquest tipus d’emmagatzematge està optimitzat per ser molt eficient en les escriptures amb lectures acceptables.  
