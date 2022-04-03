@@ -6,8 +6,19 @@
 
 ![image](https://user-images.githubusercontent.com/61285257/160308243-d0ef56c5-cc02-4da9-92d4-f11fa7dccfa9.png)
 
-## Activitat 1. REALITZA I/O RESPON ELS SEGÜENTS APARTATS
 
+## ÍNDEX
+* [Activitat 1](#Ac1)
+* [Activitat 2](#Ac2)
+* [Activitat 3](#Ac3)
+* [Activitat 4](#Ac4)
+* [Activitat 5](#Ac5)
+* [Activitat 6](#Ac6)
+* [Activitat 7](#Ac7)
+* [Activitat 8](#Ac8)
+
+## Activitat 1. REALITZA I/O RESPON ELS SEGÜENTS APARTATS
+<a name="Ac1"></a>
 
 ### Indica quins són els motors d’emmagatzematge que pots utilitzar (quins estan actius)? Mostra al comanda utilitzada i el resultat d’aquesta.
        
@@ -362,7 +373,8 @@ El bloqueig es produeix aquí perquè el client A necessita un bloqueig B per el
 
 
 
-## Activitat 2. INNODB part I. REALITZA ELS SEGÜENTS APARTATS
+## Activitat 2. INNODB part I. REALITZA ELS SEGÜENTS APARTATS  
+<a name="Ac2"></a>
 
 **Desactiva l’opció que ve per defecte de innodb_file_per_table**
     
@@ -618,7 +630,8 @@ També podem comprovar el directori dels discos, com tenen i com estan creades e
 
 **Checkpoint: Mostra al professor els canvis realitzats i que la BD continua funcionant.**
     
-## Activitat 3. INNODB part II. REALITZA ELS SEGÜENTS APARTATS
+## Activitat 3. INNODB part II. REALITZA ELS SEGÜENTS APARTATS  
+<a name="Ac3"></a>
 
 **Partint de l'esquema anterior configura el Percona Server perquè cada taula generi el seu propi tablespace en una carpeta anomenada tspaces (aquesta pot estar situada a on vulgueu).**
 **Indica quins són els canvis de configuració que has realitzat.**
@@ -709,7 +722,8 @@ SELECT @@DATADIR;
 ![image](https://user-images.githubusercontent.com/61285257/160439612-83819421-2778-4fb6-9a7e-18e01416cf53.png)
 
 
-## Activitat 4. INNODB part III. REALITZA ELS SEGÜENTS APARTATS
+## Activitat 4. INNODB part III. REALITZA ELS SEGÜENTS APARTATS  
+<a name="Ac4"></a>
 
 
 **Crea un tablespace anomenat 'ts1' situat a `/discs-mysql/disk1/` i col·loca les taules actor, address i category de la BD Sakila.**
@@ -832,7 +846,8 @@ Però per comentar per sobre, en l'aspecte de les querys MySQL, per explicar una
 **Checkpoint: Mostra al professor els canvis realitzats i que la BD continua funcionant**
 
 
-## Activitat 5. REDOLOG. REALITZA ELS SEGÜENTS APARTATS. (2 punt)
+## Activitat 5. REDOLOG. REALITZA ELS SEGÜENTS APARTATS. (2 punt)  
+<a name="Ac5"></a>
 
 **Com podem comprovar (Innodb Log Checkpointing)**
 **LSN (Log Sequence Number)**
@@ -898,11 +913,13 @@ Podem veure que no hi ha cap modificació, perquè no hem modificat cap pàgina 
 
 **Checkpoint: Mostra al professor els canvis realitzats i que la BD continua funcionant.**
 
-## Activitat 6. Implentar BD Distribuïdes. (1,5 punts)
+## Activitat 6. Implentar BD Distribuïdes. (1,5 punts)  
+<a name="Ac6"></a>
 
 
     
 ## Activitat 7. Storage Engine CSV (0,5 punts)
+<a name="Ac7"></a>
 
 **Documenta i posa exemple de com utilitzar ENGINE CSV.**
 
@@ -976,6 +993,7 @@ Ara amb el fitxer .csv podem llegir, i fins i tot escriure, mitjançant aplicaci
 **Checkpoint: Mostra al professor la configuració que has hagut de realitzar i el seu funcionament.**
 
 ## Activitat 8. Storage Engine MyRocks (1 punt)
+<a name="Ac8"></a>
 
 MyRocks és un motor d'emmagatzematge per MySQL basat en RocksDB (SGBD incrustat de tipus clau-valor). 
 Aquest tipus d’emmagatzematge està optimitzat per ser molt eficient en les escriptures amb lectures acceptables.  
