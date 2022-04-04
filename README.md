@@ -856,10 +856,10 @@ Però per comentar per sobre, en l'aspecte de les querys MySQL, per explicar una
 * [Tornar al ÍNDEX](#index)
 
 
-**Com podem comprovar (Innodb Log Checkpointing)**
-**LSN (Log Sequence Number)**
-**L'últim LSN actualitzat a disc**
-**Quin és l'últim LSN que se li ha fet Checkpoint**
+**Com podem comprovar (Innodb Log Checkpointing)**  
+**LSN (Log Sequence Number)**  
+**L'últim LSN actualitzat a disc**  
+**Quin és l'últim LSN que se li ha fet Checkpoint**  
 
 Per comprovar el Log Checkpointing d'InnoDB podem fer-ho a través d'aquesta comanda, que és força llarg el resultat però només mostrarà els logs que demana l'activitat, subratllat en groc.  
 
