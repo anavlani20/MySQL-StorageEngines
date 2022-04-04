@@ -841,6 +841,8 @@ Podem consultar els registres de les taules introduïdes anteriorment amb un sim
 
 Les configuracions s'han mostrat anteriorment a aquesta pregunta, vull dir, que s'han mostrat mentre s'ha fet aquest apartat.
 
+L'arxiu de configuració my.cnf l'he deixat com a l'exercici 2, amb el directori de dades a /discs-mysql
+
 Però per comentar per sobre, en l'aspecte de les querys MySQL, per explicar una mica he fet servir:
  
 - **CREATE TABLESPACE**-*DDL*: Per crear espais de taules, amb un ADD DATAFILE per afegir i crear un directori de dades com ts1.ibd dins de /discs-mysql/disk1,per exemple.  
@@ -922,7 +924,206 @@ Podem veure que no hi ha cap modificació, perquè no hem modificat cap pàgina 
 ## Activitat 6. Implentar BD Distribuïdes. (1,5 punts)  
 * [Tornar al ÍNDEX](#index)
 
+**Com s'ha vist a classe MySQL proporciona el motor d'emmagatzemament FEDERATED que té com a funció permetre l'accés remot a bases de dades MySQL en un servidor local sense utilitzar tècniques de replicació ni clustering.**  
 
+
+**Prepara un Servidor Percona Server amb la BD de Sakila.**  
+**Prepara un segon servidor Percona Server a on hi hauran un conjunt de taules FEDERADES al primer servdor.**  
+El motor "FEDERAT= Federated Storage Engine " permet a un usuari de base de dades crear una rèplica local d'una taula present en una base de dades diferent.  
+
+En altres paraules, podrem accedir a dades de taules de bases de dades remotes en lloc de bases de dades locals.  
+
+La meva proposta i objectiu en aquesta activitat és des del servidor local(slave), accedir a les taules de la base de dades sakila, que s'ubiquen al servidor remot(master).  
+
+Accedirem a aquestes dades a base de crear taules amb el motor corresponent, en aquest cas FEDERATED.  
+
+![image](https://user-images.githubusercontent.com/61285257/161570772-b80c995b-2f01-4881-b411-16926fdcd09d.png)  
+
+Tindrem dues maquines un que actuarà com Master i l’altre com Slave.  
+
+*Mestre-esclau (Master-slave en anglès) és un model de protocol de comunicació en què un dispositiu o procés (conegut com a mestre o màster) controla un o més d'altres dispositius o processos (coneguts com a esclaus o slaves).*
+
+Aquestes serien les dades que necessitem saber, per ubicar-nos, tant com de la maquina com del sistema de gestió:  
+
+![image](https://user-images.githubusercontent.com/61285257/161571071-a5afa930-1b56-4a66-b96f-81d7c5ffd217.png)
+
+Creació d’usuaris:
+
+![image](https://user-images.githubusercontent.com/61285257/161571150-171fdfd9-ec1d-4367-8e7a-02447eae5014.png)
+
+![image](https://user-images.githubusercontent.com/61285257/161571186-146e1ae4-f800-407a-89ea-f592f462e81d.png)
+
+![image](https://user-images.githubusercontent.com/61285257/161571228-202bbc67-6e93-4b46-9fa2-5808668bf85d.png)
+
+![image](https://user-images.githubusercontent.com/61285257/161571256-46974a6b-bae1-4315-8c05-e162e3423b74.png)
+
+![image](https://user-images.githubusercontent.com/61285257/161571301-290f2c18-f665-422c-8e28-a0a4450b99d6.png)
+
+![image](https://user-images.githubusercontent.com/61285257/161571339-5bc9456d-3389-4319-878a-1c96d9b9e3e5.png)![image](https://user-images.githubusercontent.com/61285257/161571369-2e6753b4-38cc-44fc-a735-f4c8af40cc34.png)
+
+![image](https://user-images.githubusercontent.com/61285257/161571599-b09b06ab-6e74-424a-b916-a3229f8975a8.png)
+
+Farem les següents configuracions en el Slave.  
+L'opció del motor FEDERATED no cal que estigui habilitada als dos servidors, en aquest cas, només cal que estigui habilitada el servidor local(slave) on s'emmagatzema/crearem la taula federada.  
+
+Deshabilitarem la seguretat SELinux per si ens arriba a donar problemes a l'hora d'accedir a la base de dades del servidor master.  
+
+![image](https://user-images.githubusercontent.com/61285257/161571716-8b7393bf-c9ab-4a36-acfd-e4623c721405.png)
+
+![image](https://user-images.githubusercontent.com/61285257/161571727-d430048a-677f-456f-8d59-6eb60aa049f2.png)
+
+Després d’habilitar el motor en la configuració, reiniciarem el servei mysql.  
+
+![image](https://user-images.githubusercontent.com/61285257/161571760-913a82ed-333c-4d1b-9013-32064e0d728d.png)
+
+Comprovarem els canvis aplicats, podem veure que tenim el motor FEDERATED habilitat.  
+
+![image](https://user-images.githubusercontent.com/61285257/161571810-0106e1ab-230e-46ff-9e73-0cb170accc8c.png)
+
+**Per realitzar aquest link entre les dues BD podem fer-ho de dues maneres:**  
+
+**Opció1: especificar TOTA la cadena de connexió a CONNECTION.**
+
+**Opció2: especifficar una connexió a un server a CONNECTION que prèviament s'ha creat mitjançant CREATE SERVER.**  
+
+**Posa un exemple de 2 taules de cada opció.**  
+
+
+Comencem ara amb el que seria la practica, amb les connexions crearem una taula federated al slave.
+
+![image](https://user-images.githubusercontent.com/61285257/161572081-cad1f158-fb28-4041-89c9-0c694da6749f.png)
+
+Aquestes connexions es poden fer de dues maneres i com que la pràctica ens demana dos exemples de cada opció, accedirem a dues taules de cada opció.  
+
+![image](https://user-images.githubusercontent.com/61285257/161572215-e6c80418-b73b-4c45-9154-cf431a3be6f7.png)
+
+Ens connectarem des del slave a la taula actor(sakila) del master.  
+
+Per tant per simplificar el procés, agafarem la consulta DDL ubicada al sakila-schema.sql de la creació de la taula actor i farem les modificacions necessàries(engine=federated i connexions), per desprès executar-ho en el slave.
+Òbviament també canviarem el nom de la taula per diferenciar-ho davant la taula del master.  
+
+![image](https://user-images.githubusercontent.com/61285257/161572296-73ec5a3f-0e60-4320-bc89-c54fa382c000.png)
+
+Aquesta es la plantilla que agafarem i el convertirem tal com així:  
+
+![image](https://user-images.githubusercontent.com/61285257/161572359-541c2b88-7268-4f72-80c0-33f28ec9bf6f.png)
+
+````mysql
+CREATE TABLE actor_federated (
+  actor_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  first_name VARCHAR(45) NOT NULL,
+  last_name VARCHAR(45) NOT NULL,
+  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY  (actor_id),
+  KEY idx_actor_last_name (last_name)
+)ENGINE=FEDERATED CONNECTION='mysql://aryan:aryan@192.168.1.114:3306/sakila/actor';
+````
+
+Aquest procés el replicarem fins al que queda de pràctica.
+
+![image](https://user-images.githubusercontent.com/61285257/161572782-86a6fb1f-50f9-44df-8802-8929140577b9.png)
+
+
+![image](https://user-images.githubusercontent.com/61285257/161572734-1f2747d7-b8d7-426d-abf9-d7b9e2068626.png)
+
+Afegirem un registre a aquesta taula federada i ho comprovarem.
+
+![image](https://user-images.githubusercontent.com/61285257/161572881-6941915c-27f9-4245-bce0-35f7878d5096.png)
+
+![image](https://user-images.githubusercontent.com/61285257/161572920-00780f46-33ad-4bb2-933c-72b32372ace8.png)
+
+Si ho comprovem al servidor remot, podrem veure com ha replicat el registre.
+
+![image](https://user-images.githubusercontent.com/61285257/161572950-5a5f8d85-ca75-4078-ad98-495f121b566f.png)
+
+Farem el mateix procés amb un altre taula.
+
+![image](https://user-images.githubusercontent.com/61285257/161573025-3e5743b0-b620-4562-b416-29a2260f21dd.png)
+
+````mysql
+CREATE TABLE language_federated (
+  language_id TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name CHAR(20) NOT NULL,
+  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (language_id)
+)ENGINE=FEDERATED CONNECTION='mysql://aryan:aryan@192.168.1.114:3306/sakila/language';
+````
+
+![image](https://user-images.githubusercontent.com/61285257/161573171-59fea5cf-e248-4120-a32b-34151c7b7cd0.png)
+
+Crearem la taula federada.
+
+![image](https://user-images.githubusercontent.com/61285257/161573205-36329466-68bb-40d1-a722-2ba0224fe86a.png)
+
+Afegirem un registre a aquesta taula federada i ho comprovarem.
+
+![image](https://user-images.githubusercontent.com/61285257/161573245-d0f11d37-8ade-473a-ac6d-93a296b18fa4.png)  
+
+![image](https://user-images.githubusercontent.com/61285257/161573282-d4200f77-6bf0-4b7d-b12e-02dd6c1a00e7.png)
+
+Si ho comprovem al servidor remot, podrem veure com ha replicat el registre.
+
+![image](https://user-images.githubusercontent.com/61285257/161573332-8e58cb35-5b3a-4d64-a6a4-87bf238e7d5e.png)  
+
+![image](https://user-images.githubusercontent.com/61285257/161573381-d9d1747f-acfd-47c4-b243-fa9aea16e664.png)
+
+Si estem creant diverses taules FEDERATED al mateix servidor, o si voleu simplificar el procés de creació de taules FEDERATED, podem utilitzar la instrucció CREATE SERVER per definir els paràmetres de connexió del servidor, tal com ho faríem amb la cadena CONNECTION.
+
+![image](https://user-images.githubusercontent.com/61285257/161573459-55896e63-ec02-4b59-98b8-ce31e3ee63ee.png)
+
+El format de la instrucció CREATE SERVER és:
+
+````mysql
+CREATE SERVER master
+FOREIGN DATA WRAPPER mysql
+OPTIONS (USER 'aryan', PASSWORD 'aryan', HOST '192.168.1.114', PORT 3306, DATABASE 'sakila');
+````
+
+![image](https://user-images.githubusercontent.com/61285257/161573574-1a8dad5b-0a11-48d3-a292-743eaefe6265.png)
+
+Ja tindríem la connexió feta, ara a l’hora de crear les taules federades nomes hauríem de especificar el servidor i la taula.  
+
+````mysql
+CREATE TABLE country_federated (
+  country_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  country VARCHAR(50) NOT NULL,
+  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY  (country_id)
+)ENGINE=FEDERATED CONNECTION='master/country';
+````
+![image](https://user-images.githubusercontent.com/61285257/161573738-3bb6e8e0-02d9-422d-b252-3fee8b3459a4.png)
+
+![image](https://user-images.githubusercontent.com/61285257/161573771-6cca77ce-cfd6-4460-875f-a2fbf3650b5b.png)
+
+![image](https://user-images.githubusercontent.com/61285257/161573788-c659745a-ecfa-4f60-aeec-1547030c08a7.png)
+
+![image](https://user-images.githubusercontent.com/61285257/161573838-b30f172c-53d7-4899-8cb0-459c4de137e2.png)
+
+````mysql
+CREATE TABLE category_federated (
+  category_id TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(25) NOT NULL,
+  last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY  (category_id)
+)ENGINE=FEDERATED CONNECTION='master/category';
+````
+
+![image](https://user-images.githubusercontent.com/61285257/161573984-f96b0d9c-76b6-42df-872c-884e45ffde8f.png)
+
+![image](https://user-images.githubusercontent.com/61285257/161574040-4f119efa-64e7-4ac1-924e-412fa99606b7.png)
+
+![image](https://user-images.githubusercontent.com/61285257/161574055-e4a1fc71-b10f-4fc1-bb99-997e52d50db6.png)
+
+
+
+
+**Tingues en compte els permisos a nivell de BD i de SO així com temes de seguretat com firewalls, etc...**  
+
+Els usuaris tenien privilegis de root en tot moment, el tallafocs en aquesta pràctica estava deshabilitat i també hem deshabilitat les seguretat selinux que de vegades pot provocar interferències entre els dos servidors.
+
+**Detalla quines són els passos i comandes que has hagut de realitzar en cada màquina.**
+
+Aquest exercici s'ha documentat mentre es feia, als apartats corresponents.
 
 <a name="Ac7"></a>   
 ## Activitat 7. Storage Engine CSV (0,5 punts)  
