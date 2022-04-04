@@ -152,7 +152,7 @@ Els fitxers **.MYD** tenen una mida inicial de 0.
 - Index file (.MYI): Guarda els índexs de les taules MyISAM.
 - Backup file (.TRN): Els fitxers TRN s'utilitzen per restaurar la base de dades i es poden utilitzar amb altres fitxers TRN per retrocedir en cadena a qualsevol estat anterior de la base de dades.
 
-Pràcticament no es pot veure el contingut de cap fitxer perquè estan encryptats.
+#### Pràcticament no es pot veure el contingut de cap fitxer perquè estan encryptats.
     
 
 ### Un cop fet això torna a deixar el motor InnoDB per defecte.
@@ -452,7 +452,7 @@ Els fitxers .frm tenen una mida mínima de 1,2K fins al màxim que és 9,0K.
 Els fitxers .ibd tenen una mida mínima de 96K fins al màxim que és 160K. 
 Els fitxers .TRN tenen una mida de mitjana d'uns 50 bytes aproximadament.  
 
-Pràcticament no es pot veure el contingut de cap fitxer perquè estan encryptats.
+### Pràcticament no es pot veure el contingut de cap fitxer perquè estan encryptats.
 
 **InnoDB TableSpace**
 Després tenim el .ibdata1, que està al directori per defecte on es guarden les dades MySQL, a /var/lib/mysql.  
