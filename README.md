@@ -1028,6 +1028,8 @@ Aquest procés el replicarem fins al que queda de pràctica.
 
 Afegirem un registre a aquesta taula federada i ho comprovarem.
 
+Crearem la taula federada i podem veure que tenim un registre, que exactament el vam crear en l’activitat 4 això, ens diu que la connexió FEDERATED es successiva.
+
 ![image](https://user-images.githubusercontent.com/61285257/161572881-6941915c-27f9-4245-bce0-35f7878d5096.png)
 
 ![image](https://user-images.githubusercontent.com/61285257/161572920-00780f46-33ad-4bb2-933c-72b32372ace8.png)
@@ -1051,7 +1053,7 @@ CREATE TABLE language_federated (
 
 ![image](https://user-images.githubusercontent.com/61285257/161573171-59fea5cf-e248-4120-a32b-34151c7b7cd0.png)
 
-Crearem la taula federada.
+Crearem la taula federada, ens agafa tambè el registre afegit en l'activitat 4, pero igualment tornarem a fer les comprovacions.
 
 ![image](https://user-images.githubusercontent.com/61285257/161573205-36329466-68bb-40d1-a722-2ba0224fe86a.png)
 
@@ -1067,7 +1069,7 @@ Si ho comprovem al servidor remot, podrem veure com ha replicat el registre.
 
 ![image](https://user-images.githubusercontent.com/61285257/161573381-d9d1747f-acfd-47c4-b243-fa9aea16e664.png)
 
-Si estem creant diverses taules FEDERATED al mateix servidor, o si voleu simplificar el procés de creació de taules FEDERATED, podem utilitzar la instrucció CREATE SERVER per definir els paràmetres de connexió del servidor, tal com ho faríem amb la cadena CONNECTION.
+Si estem creant diverses taules FEDERATED al mateix servidor, o si volem simplificar el procés de creació de taules FEDERATED, podem utilitzar la instrucció CREATE SERVER per definir els paràmetres de connexió del servidor, tal com ho faríem amb la cadena CONNECTION.
 
 ![image](https://user-images.githubusercontent.com/61285257/161573459-55896e63-ec02-4b59-98b8-ce31e3ee63ee.png)
 
@@ -1081,7 +1083,7 @@ OPTIONS (USER 'aryan', PASSWORD 'aryan', HOST '192.168.1.114', PORT 3306, DATABA
 
 ![image](https://user-images.githubusercontent.com/61285257/161573574-1a8dad5b-0a11-48d3-a292-743eaefe6265.png)
 
-Ja tindríem la connexió feta, ara a l’hora de crear les taules federades nomes hauríem de especificar el servidor i la taula.  
+Ara tindríem la connexió feta, a l’hora de crear les taules federades nomes hauríem de especificar el servidor i la taula.  
 
 ````mysql
 CREATE TABLE country_federated (
@@ -1091,13 +1093,19 @@ CREATE TABLE country_federated (
   PRIMARY KEY  (country_id)
 )ENGINE=FEDERATED CONNECTION='master/country';
 ````
+
+Crearem la taula federada i afegirem un registre.
 ![image](https://user-images.githubusercontent.com/61285257/161573738-3bb6e8e0-02d9-422d-b252-3fee8b3459a4.png)
 
 ![image](https://user-images.githubusercontent.com/61285257/161573771-6cca77ce-cfd6-4460-875f-a2fbf3650b5b.png)
 
+Si ho comprovem al servidor remot, podrem veure com ha replicat el registre.
+
 ![image](https://user-images.githubusercontent.com/61285257/161573788-c659745a-ecfa-4f60-aeec-1547030c08a7.png)
 
 ![image](https://user-images.githubusercontent.com/61285257/161573838-b30f172c-53d7-4899-8cb0-459c4de137e2.png)
+
+Exactament el mateix procés.
 
 ````mysql
 CREATE TABLE category_federated (
@@ -1108,9 +1116,14 @@ CREATE TABLE category_federated (
 )ENGINE=FEDERATED CONNECTION='master/category';
 ````
 
+Crearem la taula federada,fegirem un registre a aquesta taula federada i ho comprovarem.  
+
 ![image](https://user-images.githubusercontent.com/61285257/161573984-f96b0d9c-76b6-42df-872c-884e45ffde8f.png)
 
 ![image](https://user-images.githubusercontent.com/61285257/161574040-4f119efa-64e7-4ac1-924e-412fa99606b7.png)
+
+
+Si ho comprovem al servidor remot, podrem veure com ha replicat el registre.
 
 ![image](https://user-images.githubusercontent.com/61285257/161574055-e4a1fc71-b10f-4fc1-bb99-997e52d50db6.png)
 
@@ -1266,7 +1279,43 @@ Podem observar la mida dels fitxers .frm (contenen informació relacionada amb e
 
 **Quina és la compressió per defecte que utilitza per les taules? Com ho faries per canviar-lo. Per exemple utilitza Zlib o ZSTD o sense compressió.**
 
-Per defecte els arxius on estan els taules i les dades estan guardades e encryptades(compressió) en un fitxer .frm, com ho hem vist en l'anterior captura.
+Per defecte els arxius on estan els taules i les dades estan guardades e encryptades(compressió) en KLZ4, respaldades enun fitxer .frm, com ho hem vist en l'anterior captura.
+
+Per saber-ho, utilitzarem aquesta consulta DML:
+
+````mysql
+SELECT * FROM INFORMATION_SCHEMA.ROCKSDB_CF_OPTIONS 
+WHERE OPTION_TYPE LIKE '%ompression%' and cf_name='default';
+````
+
+![image](https://user-images.githubusercontent.com/61285257/161578544-c598a355-5000-4503-8bec-371e0bd39893.png)
+
+Com podem veure i com he comentat abans, la compressió la tenim a ZLZ4. En el meu cas la canviaré a ZSTD. 
+Ho farem afegint aquesta línia al fitxer de configuració /etc/my.cnf
+
+````bash
+[mysqld]
+rocksdb_default_cf_options=compression=kZSTD;bottommost_compression=kZSTD
+````
+
+
+![image](https://user-images.githubusercontent.com/61285257/161592943-46aebb12-6160-4822-9492-426d2842cddf.png)
+
+Desem els canvis i reiniciem el servei mysql.
+
+![image](https://user-images.githubusercontent.com/61285257/161593047-139c0c0f-b5ad-4858-b013-7f8317c3dc9b.png)
+
+
+Per comprovar que hem canviat el tipus de compressió, farem servir la mateixa consulta DML esmentada al principi.
+
+
+![image](https://user-images.githubusercontent.com/61285257/161593111-61e50ccd-049a-4ad3-a372-b0218ebbc83d.png)
+
+Compressió actualitzat a ZSTD.
+
+
+
+#### També podem fer un without-compress, com a alternativa(opcional).
 
 Per canviar aixó utilitzarem una eina de linux anomenada Hexdump.
 
